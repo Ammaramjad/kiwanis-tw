@@ -186,6 +186,77 @@ pickup.value = copy.airport.pickup;
 dropoff.value = copy.airport.dropoff;
 quote();
 
+(function begoniaMotion() {
+  const loader = document.getElementById("loader");
+  const intro = document.getElementById("intro");
+  const app = document.getElementById("app");
+  const cursor = document.getElementById("cursor");
+
+  const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+
+  async function playIntro() {
+    await wait(1800);
+    loader.classList.add("is-out");
+    intro.classList.add("is-on");
+    await wait(700);
+    intro.classList.add("is-glitch");
+    await wait(700);
+    intro.classList.add("is-flash");
+    await wait(180);
+    intro.classList.add("is-out");
+    app.classList.add("is-in");
+    await wait(520);
+    loader.remove();
+    intro.remove();
+  }
+
+  playIntro();
+
+  let x = innerWidth / 2;
+  let y = innerHeight / 2;
+  let cx = x;
+  let cy = y;
+  window.addEventListener("pointermove", (e) => {
+    x = e.clientX;
+    y = e.clientY;
+    const hit = e.target.closest("button, a, input, .tab");
+    cursor.classList.toggle("is-link", Boolean(hit));
+  });
+  function follow() {
+    cx += (x - cx) * 0.22;
+    cy += (y - cy) * 0.22;
+    cursor.style.transform = `translate(${cx}px, ${cy}px)`;
+    requestAnimationFrame(follow);
+  }
+  follow();
+
+  const canvas = document.getElementById("draw");
+  const ctx = canvas.getContext("2d");
+  function size() {
+    canvas.width = innerWidth;
+    canvas.height = innerHeight;
+  }
+  size();
+  window.addEventListener("resize", size);
+  let px = x;
+  let py = y;
+  function trail() {
+    ctx.fillStyle = "rgba(9,11,16,0.05)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.strokeStyle = "rgba(251,121,86,0.45)";
+    ctx.lineWidth = 1.4;
+    ctx.lineCap = "round";
+    ctx.beginPath();
+    ctx.moveTo(px, py);
+    ctx.lineTo(x, y);
+    ctx.stroke();
+    px = x;
+    py = y;
+    requestAnimationFrame(trail);
+  }
+  trail();
+})();
+
 document.addEventListener("keydown", (e) => {
   if (!["ArrowLeft", "ArrowRight"].includes(e.key)) return;
   if (!e.target.classList.contains("tab") && e.target !== document.body) return;
