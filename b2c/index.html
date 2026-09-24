@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fleet OS · Book a chauffeur</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body data-mode="airport">
+    <div class="stage" aria-hidden="true">
+      <div class="aurora aurora-a"></div>
+      <div class="aurora aurora-b"></div>
+      <div class="grain"></div>
+      <svg class="routes" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice">
+        <defs>
+          <linearGradient id="goldLine" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#d7b56a" stop-opacity="0" />
+            <stop offset="40%" stop-color="#f0d48a" />
+            <stop offset="100%" stop-color="#d7b56a" stop-opacity="0" />
+          </linearGradient>
+        </defs>
+        <path class="route r1" d="M80 720 C 280 640, 420 520, 640 480 S 980 360, 1280 220" />
+        <path class="route r2" d="M120 180 C 360 260, 520 340, 760 400 S 1100 620, 1360 760" />
+        <path class="route r3" d="M-40 420 C 220 380, 480 300, 720 340 S 1080 520, 1500 480" />
+        <circle class="node n1" cx="220" cy="680" r="4" />
+        <circle class="node n2" cx="640" cy="480" r="5" />
+        <circle class="node n3" cx="980" cy="360" r="4" />
+        <circle class="node n4" cx="1280" cy="220" r="4" />
+        <g class="car-follow">
+          <circle class="car-glow" r="14" />
+          <rect class="car-body" x="-18" y="-7" width="36" height="14" rx="4" />
+        </g>
+      </svg>
+      <div class="radar"></div>
+      <div class="cars">
+        <span class="fleet-car c1"></span>
+        <span class="fleet-car c2"></span>
+        <span class="fleet-car c3"></span>
+      </div>
+    </div>
+
+    <header class="topbar">
+      <div class="brand">
+        <span class="mark"></span>
+        <div>
+          <strong>Fleet OS</strong>
+          <small>Chauffeur booking</small>
+        </div>
+      </div>
+      <div class="live-pill">
+        <i></i>
+        <span><b class="count">24</b> cars on the network</span>
+      </div>
+    </header>
+
+    <main class="hero">
+      <section class="copy">
+        <p class="kicker" data-copy="kicker">Airport corridors · meet & greet</p>
+        <h1 data-copy="title">Your chauffeur is already moving toward you.</h1>
+        <p class="lede" data-copy="lede">
+          Track the flight, hold at arrivals, and open the door on time. One booking language for every journey.
+        </p>
+      </section>
+
+      <form class="ticket" id="book" autocomplete="off">
+        <div class="ticket-head">
+          <span class="ticket-kicker">Book a movement</span>
+          <span class="ticket-stamp" data-copy="stamp">Fixed fare</span>
+        </div>
+
+        <div class="tabs" role="tablist" aria-label="Service categories">
+          <span class="tab-ink" id="tabInk"></span>
+          <button type="button" class="tab is-active" role="tab" aria-selected="true" data-mode="airport">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 13l8-2 2-8 2 8 8 2-8 2-2 8-2-8-8-2z" /></svg>
+            Airport Transfer
+          </button>
+          <button type="button" class="tab" role="tab" aria-selected="false" data-mode="p2p">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h16M14 6l6 6-6 6" /></svg>
+            Point to Point
+          </button>
+          <button type="button" class="tab" role="tab" aria-selected="false" data-mode="hourly">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></svg>
+            With Driver Car
+          </button>
+          <button type="button" class="tab" role="tab" aria-selected="false" data-mode="multi">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="12" r="2"/><circle cx="12" cy="7" r="2"/><circle cx="18" cy="14" r="2"/><path d="M8 12h2.5L12 8.5 15.2 13H16"/></svg>
+            Multiple City Trip
+          </button>
+        </div>
+
+        <div class="fields" id="fields">
+          <label class="field span-2" data-show="airport">
+            <span>Direction</span>
+            <div class="segment" id="direction">
+              <button type="button" class="is-on" data-dir="arrival">Arrival · airport pickup</button>
+              <button type="button" data-dir="departure">Departure · airport drop-off</button>
+            </div>
+          </label>
+
+          <label class="field">
+            <span>Pickup location</span>
+            <input id="pickup" name="pickup" placeholder="Taoyuan International Airport (TPE)" required />
+          </label>
+
+          <label class="field">
+            <span>Drop-off location</span>
+            <input id="dropoff" name="dropoff" placeholder="Taipei 101, Xinyi" required />
+          </label>
+
+          <div class="swap-wrap" data-show="p2p hourly multi">
+            <button type="button" class="swap" id="swap" aria-label="Swap pickup and drop-off">
+              ⇅
+            </button>
+          </div>
+
+          <div class="stops" id="stops" data-show="multi" hidden></div>
+
+          <button type="button" class="add-stop" id="addStop" data-show="multi">+ Add another city</button>
+
+          <label class="field" data-show="hourly">
+            <span>Hours with driver</span>
+            <input id="hours" type="number" min="2" max="24" value="4" />
+          </label>
+
+          <label class="field" data-show="airport">
+            <span>Flight number</span>
+            <input id="flight" placeholder="BR156" />
+          </label>
+
+          <label class="field">
+            <span>Pickup date & time</span>
+            <input id="when" type="datetime-local" required />
+          </label>
+
+          <label class="field">
+            <span>Passengers</span>
+            <input id="pax" type="number" min="1" max="14" value="2" />
+          </label>
+        </div>
+
+        <div class="footer">
+          <div class="quote">
+            <small data-copy="quoteLabel">Estimated chauffeur fare</small>
+            <strong id="fare">NT$2,280</strong>
+          </div>
+          <button class="cta" type="submit">
+            <span>See cars & confirm</span>
+            <i></i>
+          </button>
+        </div>
+      </form>
+    </main>
+
+    <div class="toast" id="toast" hidden></div>
+    <script src="./app.js"></script>
+  </body>
+</html>
