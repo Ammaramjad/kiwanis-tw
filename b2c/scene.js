@@ -119,6 +119,7 @@ roof.position.set(0.7, 1.96, 0);
 shuttle.add(roof);
 
 shuttle.rotation.y = -0.55;
+shuttle.position.x = -1.35;
 scene.add(shuttle);
 
 const rings = [];
@@ -172,7 +173,7 @@ function tick() {
   });
   camera.position.x = 4.6 + mouse.x * 0.4;
   camera.position.y = 1.7 + mouse.y * -0.2;
-  camera.lookAt(0.2, 0.9, 0);
+  camera.lookAt(-1.1, 0.85, 0);
   renderer.render(scene, camera);
   requestAnimationFrame(tick);
 }
