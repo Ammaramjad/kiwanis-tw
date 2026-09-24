@@ -64,7 +64,8 @@ function placeInk(btn) {
   const parent = btn.parentElement.getBoundingClientRect();
   const box = btn.getBoundingClientRect();
   ink.style.width = `${box.width}px`;
-  ink.style.transform = `translateX(${box.left - parent.left - 5}px)`;
+  ink.style.left = `${box.left - parent.left}px`;
+  ink.style.transform = "none";
 }
 
 function setCopy(mode) {

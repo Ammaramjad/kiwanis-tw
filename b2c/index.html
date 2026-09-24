@@ -103,20 +103,16 @@
             </div>
           </label>
 
-          <label class="field">
-            <span>Pickup location</span>
-            <input id="pickup" name="pickup" placeholder="Taoyuan International Airport (TPE)" required />
-          </label>
-
-          <label class="field">
-            <span>Drop-off location</span>
-            <input id="dropoff" name="dropoff" placeholder="Taipei 101, Xinyi" required />
-          </label>
-
-          <div class="swap-wrap" data-show="p2p hourly multi">
-            <button type="button" class="swap" id="swap" aria-label="Swap pickup and drop-off">
-              ⇅
-            </button>
+          <div class="loc-row">
+            <label class="field">
+              <span>Pickup location</span>
+              <input id="pickup" name="pickup" placeholder="Taoyuan International Airport (TPE)" required />
+            </label>
+            <button type="button" class="swap" id="swap" aria-label="Swap pickup and drop-off">⇅</button>
+            <label class="field">
+              <span>Drop-off location</span>
+              <input id="dropoff" name="dropoff" placeholder="Taipei 101, Xinyi" required />
+            </label>
           </div>
 
           <div class="stops" id="stops" data-show="multi" hidden></div>

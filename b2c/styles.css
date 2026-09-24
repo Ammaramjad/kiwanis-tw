@@ -239,7 +239,7 @@ body[data-mode="airport"] .radar {
 }
 
 .kicker {
-  letter-spacing: 0.18em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   font-size: 11px;
   color: var(--gold);
@@ -310,12 +310,13 @@ body[data-mode="airport"] .radar {
   position: absolute;
   top: 5px;
   bottom: 5px;
-  width: calc(25% - 6px);
   left: 5px;
+  width: calc(25% - 6px);
   border-radius: 14px;
   background: #1b1611;
-  transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+  transition: left 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), width 0.4s ease;
   z-index: 0;
+  pointer-events: none;
 }
 
 .tab {
@@ -339,9 +340,14 @@ body[data-mode="airport"] .radar {
 .tab svg {
   width: 16px;
   height: 16px;
-  fill: none;
+  fill: none !important;
   stroke: currentColor;
   stroke-width: 1.8;
+}
+
+.tab svg * {
+  fill: none !important;
+  stroke: currentColor;
 }
 
 .tab.is-active {
@@ -349,11 +355,18 @@ body[data-mode="airport"] .radar {
 }
 
 .fields {
-  position: relative;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
   margin-top: 16px;
+}
+
+.loc-row {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 1fr 40px 1fr;
+  gap: 8px;
+  align-items: end;
 }
 
 .field {
@@ -413,17 +426,10 @@ body[data-mode="airport"] .radar {
   border-color: #1b1611;
 }
 
-.swap-wrap {
-  position: absolute;
-  left: 50%;
-  top: 92px;
-  transform: translateX(-50%);
-  z-index: 3;
-}
-
 .swap {
-  width: 36px;
-  height: 36px;
+  width: 40px;
+  height: 40px;
+  margin-bottom: 4px;
   border-radius: 50%;
   border: 1px solid var(--line);
   background: #1b1611;
@@ -552,14 +558,8 @@ body[data-mode="multi"] .stops {
   display: grid;
 }
 
-body[data-mode="hourly"] .swap-wrap,
-body[data-mode="p2p"] .swap-wrap,
-body[data-mode="multi"] .swap-wrap {
-  display: block;
-}
-
-body[data-mode="airport"] .swap-wrap {
-  display: none;
+body[data-mode="airport"] .swap {
+  visibility: hidden;
 }
 
 @keyframes drift {
@@ -623,11 +623,11 @@ body[data-mode="airport"] .swap-wrap {
   .fields {
     grid-template-columns: 1fr;
   }
-  .swap-wrap {
-    position: static;
-    transform: none;
-    display: flex;
-    justify-content: center;
+  .loc-row {
+    grid-template-columns: 1fr;
+  }
+  .swap {
+    margin: -4px auto;
   }
   body {
     overflow: auto;
