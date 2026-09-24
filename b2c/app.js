@@ -24,7 +24,7 @@ const copy = {
     stamp: "Hourly charter",
     quoteLabel: "With-driver fare",
     pickup: "Songshan Airport (TSA)",
-    dropoff: "Return to hotel or next stop",
+    dropoff: "Grand Hyatt Taipei",
   },
   multi: {
     kicker: "Corridor travel · several cities",
