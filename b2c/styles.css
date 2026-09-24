@@ -77,9 +77,10 @@ body {
 .route {
   fill: none;
   stroke: url(#goldLine);
-  stroke-width: 1.6;
-  stroke-dasharray: 12 18;
+  stroke-width: 2.2;
+  stroke-dasharray: 14 16;
   animation: dash 18s linear infinite;
+  opacity: 0.9;
 }
 
 .r2 {
