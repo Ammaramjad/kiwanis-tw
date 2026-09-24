@@ -20,8 +20,8 @@ html,
 body {
   margin: 0;
   min-height: 100%;
-  background: #090b10;
-  color: var(--ink);
+  background: #f6efe6;
+  color: var(--slate);
   font-family: Manrope, sans-serif;
 }
 
@@ -61,10 +61,12 @@ body {
   background: rgba(251, 121, 86, 0.18);
 }
 
-.draw-canvas {
+.scene {
   position: fixed;
   inset: 0;
-  z-index: 1;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
   pointer-events: none;
 }
 
@@ -208,11 +210,6 @@ body {
 .app {
   position: relative;
   z-index: 2;
-  opacity: 0;
-}
-
-.app.is-in {
-  animation: fadeIn 0.7s ease forwards;
 }
 
 .display-title {
@@ -292,13 +289,7 @@ body {
 }
 
 .stage {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  background:
-    radial-gradient(1200px 700px at 12% 88%, rgba(184, 137, 58, 0.22), transparent 55%),
-    radial-gradient(900px 500px at 88% 12%, rgba(88, 126, 184, 0.2), transparent 50%),
-    linear-gradient(180deg, #10131b 0%, #07080c 100%);
+  display: none;
 }
 
 .aurora {
@@ -455,7 +446,7 @@ body[data-mode="airport"] .radar {
 }
 
 .brand small {
-  color: var(--mute);
+  color: rgba(52, 65, 84, 0.55);
   font-size: 11px;
 }
 
@@ -464,9 +455,10 @@ body[data-mode="airport"] .radar {
   align-items: center;
   gap: 8px;
   padding: 8px 12px;
-  border: 1px solid rgba(246, 240, 228, 0.14);
+  border: 1px solid rgba(52, 65, 84, 0.12);
   border-radius: 999px;
   backdrop-filter: blur(12px);
+  background: rgba(255, 255, 255, 0.5);
   font-size: 12px;
 }
 
@@ -501,12 +493,12 @@ body[data-mode="airport"] .radar {
   letter-spacing: 0.14em;
   text-transform: uppercase;
   font-size: 11px;
-  color: var(--gold);
+  color: var(--coral);
 }
 
 .lede {
   max-width: 38ch;
-  color: var(--mute);
+  color: rgba(52, 65, 84, 0.72);
   font-size: 17px;
   line-height: 1.55;
 }

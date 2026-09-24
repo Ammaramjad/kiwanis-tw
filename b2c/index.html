@@ -15,34 +15,9 @@
   <body data-mode="airport">
     <div class="noise" aria-hidden="true"></div>
     <div class="cursor" id="cursor" aria-hidden="true"><i></i></div>
-    <canvas class="draw-canvas" id="draw" aria-hidden="true"></canvas>
+    <canvas id="scene" class="scene" aria-hidden="true"></canvas>
 
-    <div class="loader" id="loader">
-      <div class="loader__waves">
-        <span class="loader__wave w1"></span>
-        <span class="loader__wave w2"></span>
-        <span class="loader__wave w3"></span>
-      </div>
-      <p class="loader__word">FLEET OS</p>
-    </div>
-
-    <div class="intro" id="intro" aria-hidden="true">
-      <div class="intro__flash"></div>
-      <h1 class="outline-title glitch-host" data-text="FLEET OS">
-        <span>F</span><span>L</span><span>E</span><span>E</span><span>T</span>
-        <span class="gap"></span>
-        <span>O</span><span>S</span>
-      </h1>
-      <span class="glitch-slice s1" data-text="FLEET OS"></span>
-      <span class="glitch-slice s2" data-text="FLEET OS"></span>
-      <span class="glitch-slice s3" data-text="FLEET OS"></span>
-    </div>
-
-    <div class="app" id="app">
-      <div class="stage" aria-hidden="true">
-        <div class="aurora aurora-a"></div>
-        <div class="aurora aurora-b"></div>
-      </div>
+    <div class="app is-in" id="app">
 
       <header class="topbar">
         <div class="brand">
@@ -150,5 +125,6 @@
 
     <div class="toast" id="toast" hidden></div>
     <script src="./app.js"></script>
+    <script type="module" src="./scene.js"></script>
   </body>
 </html>
