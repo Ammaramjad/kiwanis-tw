@@ -4,6 +4,10 @@
   --mute: rgba(200, 220, 224, 0.68);
   --ice: #5eead4;
   --ice-deep: #14b8a6;
+  --violet: #8b5cf6;
+  --coral: #fb7185;
+  --sun: #fbbf24;
+  --blue: #38bdf8;
   --panel: rgba(10, 22, 32, 0.78);
   --ticket: rgba(8, 18, 28, 0.88);
   --line: rgba(94, 234, 212, 0.16);
@@ -26,6 +30,11 @@ body {
 
 body {
   cursor: none;
+  background:
+    radial-gradient(circle at 12% 18%, rgba(56, 189, 248, 0.2), transparent 28%),
+    radial-gradient(circle at 88% 36%, rgba(139, 92, 246, 0.18), transparent 30%),
+    radial-gradient(circle at 32% 78%, rgba(251, 113, 133, 0.14), transparent 30%),
+    #050a12;
 }
 
 .noise {
@@ -87,7 +96,8 @@ body {
   width: 30px;
   height: 30px;
   border-radius: 50%;
-  background: conic-gradient(from 200deg, #5eead4, #0f766e, #5eead4);
+  background: conic-gradient(from 200deg, var(--ice), var(--blue), var(--violet), var(--coral), var(--sun), var(--ice));
+  animation: markSpin 8s linear infinite;
 }
 
 .brand strong {
@@ -144,6 +154,40 @@ body {
   position: relative;
   min-height: 100vh;
   padding: 48px 40px 80px;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.hero::before,
+.band::before {
+  content: "";
+  position: absolute;
+  inset: 4% 2%;
+  z-index: -1;
+  border-radius: 48px;
+  opacity: 0.5;
+  filter: blur(60px);
+  pointer-events: none;
+}
+
+.hero::before {
+  background: linear-gradient(125deg, rgba(56, 189, 248, 0.2), transparent 42%, rgba(139, 92, 246, 0.18));
+}
+
+#services::before {
+  background: radial-gradient(circle at 20% 45%, rgba(251, 191, 36, 0.24), transparent 40%), radial-gradient(circle at 80% 30%, rgba(251, 113, 133, 0.2), transparent 35%);
+}
+
+#flow::before {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.25), transparent 55%, rgba(56, 189, 248, 0.2));
+}
+
+#fleet::before {
+  background: radial-gradient(circle at 70% 45%, rgba(94, 234, 212, 0.24), transparent 38%), radial-gradient(circle at 20% 70%, rgba(139, 92, 246, 0.2), transparent 34%);
+}
+
+#cities::before {
+  background: linear-gradient(120deg, rgba(251, 113, 133, 0.22), transparent 45%, rgba(251, 191, 36, 0.2));
 }
 
 .hero {
@@ -408,6 +452,148 @@ body {
   border-radius: 20px;
   padding: 22px;
   backdrop-filter: blur(12px);
+  transition: transform 0.35s ease, border-color 0.35s ease, background 0.35s ease;
+}
+
+.cards article:hover,
+.steps li:hover,
+.city-grid a:hover {
+  transform: translateY(-8px);
+  border-color: rgba(255, 255, 255, 0.4);
+  background: rgba(14, 30, 44, 0.9);
+}
+
+.cards.four article:nth-child(1) { border-top: 3px solid var(--ice); }
+.cards.four article:nth-child(2) { border-top: 3px solid var(--blue); }
+.cards.four article:nth-child(3) { border-top: 3px solid var(--violet); }
+.cards.four article:nth-child(4) { border-top: 3px solid var(--coral); }
+
+.experience {
+  position: relative;
+  min-height: 110vh;
+  padding: 100px 40px;
+  display: grid;
+  grid-template-columns: 0.85fr 1.15fr;
+  gap: 60px;
+  align-items: center;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.experience::before {
+  content: "";
+  position: absolute;
+  inset: 5% 2%;
+  z-index: -2;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 56px;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(56, 189, 248, 0.3), transparent 32%),
+    radial-gradient(circle at 75% 22%, rgba(139, 92, 246, 0.35), transparent 32%),
+    radial-gradient(circle at 58% 80%, rgba(251, 113, 133, 0.3), transparent 34%),
+    rgba(8, 16, 28, 0.7);
+  backdrop-filter: blur(12px);
+}
+
+.experience h2 {
+  max-width: 12ch;
+  margin: 14px 0 20px;
+  font-family: "Instrument Serif", serif;
+  font-size: clamp(46px, 6vw, 82px);
+  font-weight: 400;
+  line-height: 0.94;
+}
+
+.experience-copy p:last-child {
+  max-width: 42ch;
+  color: var(--mute);
+  line-height: 1.7;
+}
+
+.experience-stack {
+  position: relative;
+  min-height: 500px;
+  perspective: 1000px;
+}
+
+.mood-card {
+  position: absolute;
+  width: min(420px, 85%);
+  min-height: 230px;
+  padding: 30px;
+  border-radius: 32px;
+  color: #041016;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.35);
+  transform-style: preserve-3d;
+}
+
+.mood-card small {
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+
+.mood-card h3 {
+  margin: 54px 0 6px;
+  font-family: "Instrument Serif", serif;
+  font-size: 42px;
+  font-weight: 400;
+}
+
+.mood-cyan {
+  top: 0;
+  left: 2%;
+  background: linear-gradient(135deg, #67e8f9, #5eead4);
+  animation: cardFloatA 5s ease-in-out infinite;
+}
+
+.mood-violet {
+  top: 125px;
+  right: 2%;
+  background: linear-gradient(135deg, #c4b5fd, #8b5cf6);
+  transform: rotate(6deg);
+  animation: cardFloatB 6s ease-in-out infinite;
+}
+
+.mood-coral {
+  top: 270px;
+  left: 14%;
+  background: linear-gradient(135deg, #fda4af, #fbbf24);
+  transform: rotate(-5deg);
+  animation: cardFloatC 5.5s ease-in-out infinite;
+}
+
+.color-orbit {
+  position: absolute;
+  z-index: -1;
+  width: 360px;
+  height: 360px;
+  border-radius: 50%;
+  filter: blur(10px);
+  opacity: 0.28;
+}
+
+.orbit-a { top: 10%; left: -8%; background: var(--blue); animation: orbit 12s linear infinite; }
+.orbit-b { top: 12%; right: 8%; background: var(--violet); animation: orbit 16s linear infinite reverse; }
+.orbit-c { bottom: 4%; left: 44%; background: var(--coral); animation: orbit 14s linear infinite; }
+
+.ticker {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 28px;
+  overflow: hidden;
+  border-block: 1px solid rgba(255, 255, 255, 0.16);
+  padding: 12px 0;
+  color: var(--sun);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  white-space: nowrap;
+}
+
+.ticker div {
+  width: max-content;
+  animation: ticker 24s linear infinite;
 }
 
 .cards b {
@@ -499,6 +685,24 @@ body[data-mode="multi"] .stops { display: grid; }
 
 body[data-mode="airport"] .swap { visibility: hidden; }
 
+@keyframes markSpin { to { transform: rotate(360deg); } }
+@keyframes orbit {
+  50% { transform: translate3d(60px, 40px, 0) scale(1.2); }
+  to { transform: rotate(360deg); }
+}
+@keyframes cardFloatA {
+  50% { transform: translateY(-18px) rotate(-3deg); }
+}
+@keyframes cardFloatB {
+  50% { transform: translateY(15px) rotate(2deg); }
+}
+@keyframes cardFloatC {
+  50% { transform: translateY(-14px) rotate(-1deg); }
+}
+@keyframes ticker {
+  to { transform: translateX(-50%); }
+}
+
 @media (hover: none) {
   body { cursor: auto; }
   .cursor { display: none; }
@@ -507,6 +711,7 @@ body[data-mode="airport"] .swap { visibility: hidden; }
 @media (max-width: 980px) {
   .hero,
   .split,
+  .experience,
   .cards.four,
   .cards.three,
   .city-grid { grid-template-columns: 1fr; }
@@ -516,5 +721,10 @@ body[data-mode="airport"] .swap { visibility: hidden; }
   .loc-row { grid-template-columns: 1fr; }
   .nav { display: none; }
   .hero,
-  .band { padding: 28px 16px 64px; }
+  .band,
+  .experience { padding: 64px 16px 90px; }
+  .experience-stack { min-height: 620px; }
+  .mood-card { width: 88%; }
+  .mood-violet { top: 170px; }
+  .mood-coral { top: 340px; }
 }
