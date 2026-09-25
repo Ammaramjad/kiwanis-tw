@@ -14,57 +14,55 @@
   </head>
   <body data-mode="airport">
     <div class="noise" aria-hidden="true"></div>
-    <div class="cursor" id="cursor" aria-hidden="true"><i></i></div>
+    <div class="cursor" id="cursor" aria-hidden="true"></div>
     <canvas id="scene" class="scene" aria-hidden="true"></canvas>
 
-    <div class="app is-in" id="app">
-
-      <header class="topbar">
-        <div class="brand">
-          <span class="mark"></span>
-          <div>
-            <strong>Fleet OS</strong>
-            <small>Chauffeur booking</small>
-          </div>
+    <header class="topbar">
+      <div class="brand">
+        <span class="mark"></span>
+        <div>
+          <strong>Fleet OS</strong>
+          <small>Night corridor booking</small>
         </div>
-        <div class="live-pill">
-          <i></i>
-          <span><b class="count">24</b> cars on the network</span>
-        </div>
-      </header>
+      </div>
+      <nav class="nav">
+        <a href="#book">Book</a>
+        <a href="#services">Services</a>
+        <a href="#flow">Flow</a>
+        <a href="#fleet">Fleet</a>
+        <a href="#cities">Cities</a>
+      </nav>
+      <div class="cam-controls">
+        <button type="button" id="panLeft" aria-label="Pan left">←</button>
+        <button type="button" id="zoomOut" aria-label="Zoom out">−</button>
+        <button type="button" id="zoomIn" aria-label="Zoom in">+</button>
+        <button type="button" id="panRight" aria-label="Pan right">→</button>
+      </div>
+    </header>
 
-      <main class="hero">
-        <section class="copy">
-          <p class="kicker mask-in" data-copy="kicker">Airport corridors · meet & greet</p>
+    <main class="app" id="app">
+      <section class="hero shot" id="book" data-shot="0">
+        <div class="copy">
+          <p class="kicker" data-copy="kicker">Airport corridors · meet & greet</p>
           <h1 class="display-title" data-copy="title">Your chauffeur is already moving toward you.</h1>
-          <p class="lede mask-in" data-copy="lede">
-            Track the flight, hold at arrivals, and open the door on time. One booking language for every journey.
+          <p class="lede" data-copy="lede">
+            Track the flight, hold at arrivals, and open the door on time. Pickup and drop-off stay on one ticket.
           </p>
-        </section>
+        </div>
 
-        <form class="ticket" id="book" autocomplete="off">
+        <form class="ticket" id="bookForm" autocomplete="off">
           <div class="ticket-head">
             <span class="ticket-kicker">Book a movement</span>
             <span class="ticket-stamp" data-copy="stamp">Fixed fare</span>
           </div>
-
           <div class="tabs" role="tablist" aria-label="Service categories">
             <span class="tab-ink" id="tabInk"></span>
-            <button type="button" class="tab is-active" role="tab" aria-selected="true" data-mode="airport">
-              Airport Transfer
-            </button>
-            <button type="button" class="tab" role="tab" aria-selected="false" data-mode="p2p">
-              Point to Point
-            </button>
-            <button type="button" class="tab" role="tab" aria-selected="false" data-mode="hourly">
-              With Driver Car
-            </button>
-            <button type="button" class="tab" role="tab" aria-selected="false" data-mode="multi">
-              Multiple City Trip
-            </button>
+            <button type="button" class="tab is-active" role="tab" aria-selected="true" data-mode="airport">Airport Transfer</button>
+            <button type="button" class="tab" role="tab" aria-selected="false" data-mode="p2p">Point to Point</button>
+            <button type="button" class="tab" role="tab" aria-selected="false" data-mode="hourly">With Driver Car</button>
+            <button type="button" class="tab" role="tab" aria-selected="false" data-mode="multi">Multiple City Trip</button>
           </div>
-
-          <div class="fields" id="fields">
+          <div class="fields">
             <label class="field span-2" data-show="airport">
               <span>Direction</span>
               <div class="segment" id="direction">
@@ -72,56 +70,98 @@
                 <button type="button" data-dir="departure">Departure · airport drop-off</button>
               </div>
             </label>
-
             <div class="loc-row">
               <label class="field">
                 <span>Pickup location</span>
-                <input id="pickup" name="pickup" placeholder="Taoyuan International Airport (TPE)" required />
+                <input id="pickup" name="pickup" required />
               </label>
               <button type="button" class="swap" id="swap" aria-label="Swap pickup and drop-off">⇅</button>
               <label class="field">
                 <span>Drop-off location</span>
-                <input id="dropoff" name="dropoff" placeholder="Taipei 101, Xinyi" required />
+                <input id="dropoff" name="dropoff" required />
               </label>
             </div>
-
             <div class="stops" id="stops" data-show="multi" hidden></div>
             <button type="button" class="add-stop" id="addStop" data-show="multi">+ Add another city</button>
-
             <label class="field" data-show="hourly">
               <span>Hours with driver</span>
               <input id="hours" type="number" min="2" max="24" value="4" />
             </label>
-
             <label class="field" data-show="airport">
               <span>Flight number</span>
               <input id="flight" placeholder="BR156" />
             </label>
-
             <label class="field">
               <span>Pickup date & time</span>
               <input id="when" type="datetime-local" required />
             </label>
-
             <label class="field">
               <span>Passengers</span>
               <input id="pax" type="number" min="1" max="14" value="2" />
             </label>
           </div>
-
-          <div class="footer">
+          <div class="ticket-foot">
             <div class="quote">
               <small data-copy="quoteLabel">Estimated chauffeur fare</small>
               <strong id="fare">NT$2,280</strong>
             </div>
-            <button class="cta" type="submit">
-              <span>See cars & confirm</span>
-              <i></i>
-            </button>
+            <button class="cta" type="submit"><span>See cars & confirm</span><i></i></button>
           </div>
         </form>
-      </main>
-    </div>
+      </section>
+
+      <section class="band shot" id="services" data-shot="1">
+        <p class="kicker">Four ways to move</p>
+        <h2>Every category keeps pickup and drop-off.</h2>
+        <div class="cards four">
+          <article><b>01</b><h3>Airport Transfer</h3><p>Flight-aware meet & greet. The shuttle waits at the door you name.</p></article>
+          <article><b>02</b><h3>Point to Point</h3><p>Two addresses. One quiet route. Fixed fare before you confirm.</p></article>
+          <article><b>03</b><h3>With Driver Car</h3><p>Keep the same chauffeur by the hour. Meetings, dinner, back.</p></article>
+          <article><b>04</b><h3>Multiple City Trip</h3><p>String cities on one ticket. The car does not change hands.</p></article>
+        </div>
+      </section>
+
+      <section class="band shot split" id="flow" data-shot="2">
+        <div>
+          <p class="kicker">How the corridor works</p>
+          <h2>Book. Track. Arrive. The shuttle stays in frame.</h2>
+        </div>
+        <ol class="steps">
+          <li><span>1</span><div><h3>Name the doors</h3><p>Pickup, drop-off, time, and passengers. The quote updates live.</p></div></li>
+          <li><span>2</span><div><h3>A car is assigned</h3><p>Dispatch picks from the live network — not a private handshake.</p></div></li>
+          <li><span>3</span><div><h3>The door opens</h3><p>Meet & greet, luggage, OTP. You never hunt for a plate.</p></div></li>
+        </ol>
+      </section>
+
+      <section class="band shot" id="fleet" data-shot="3">
+        <p class="kicker">The night fleet</p>
+        <h2>Same shuttle language. Different room inside.</h2>
+        <div class="cards three">
+          <article><h3>Sedan</h3><p>3 guests · 3 bags · city and airport.</p></article>
+          <article class="hi"><h3>MPV shuttle</h3><p>6 guests · 6 bags · the model you see moving.</p></article>
+          <article><h3>Van</h3><p>8 guests · family or crew with luggage.</p></article>
+        </div>
+      </section>
+
+      <section class="band shot cities" id="cities" data-shot="4">
+        <p class="kicker">East Asia corridors</p>
+        <h2>Routes people actually book.</h2>
+        <div class="city-grid">
+          <a>Taipei · TPE / 101</a>
+          <a>Taoyuan hub</a>
+          <a>Taichung · RMQ</a>
+          <a>Tainan old city</a>
+          <a>Kaohsiung · KHH</a>
+          <a>Hualien · Taroko</a>
+        </div>
+      </section>
+
+      <section class="band shot end" id="end" data-shot="5">
+        <p class="kicker">Ready when you are</p>
+        <h2>Zoom the shuttle. Then book the movement.</h2>
+        <a class="cta" href="#book">Back to booking</a>
+      </section>
+    </main>
 
     <div class="toast" id="toast" hidden></div>
     <script src="./app.js"></script>

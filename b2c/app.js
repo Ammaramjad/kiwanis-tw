@@ -155,10 +155,10 @@ document.getElementById("addStop").addEventListener("click", () => {
 });
 
 ["input", "change"].forEach((ev) => {
-  document.getElementById("book").addEventListener(ev, quote);
+  document.getElementById("bookForm").addEventListener(ev, quote);
 });
 
-document.getElementById("book").addEventListener("submit", (e) => {
+document.getElementById("bookForm").addEventListener("submit", (e) => {
   e.preventDefault();
   const mode = document.body.dataset.mode;
   const label = tabs.find((t) => t.dataset.mode === mode).textContent.trim();
@@ -206,6 +206,11 @@ quote();
   }
   follow();
 })();
+
+document.getElementById("zoomIn")?.addEventListener("click", () => window.fleetCam?.zoomIn());
+document.getElementById("zoomOut")?.addEventListener("click", () => window.fleetCam?.zoomOut());
+document.getElementById("panLeft")?.addEventListener("click", () => window.fleetCam?.pan(-1));
+document.getElementById("panRight")?.addEventListener("click", () => window.fleetCam?.pan(1));
 
 document.addEventListener("keydown", (e) => {
   if (!["ArrowLeft", "ArrowRight"].includes(e.key)) return;
