@@ -22,6 +22,12 @@ scene.add(rim);
 const fill = new THREE.PointLight(0x5eead4, 10, 22);
 fill.position.set(0, 2.4, 4);
 scene.add(fill);
+const violetLight = new THREE.PointLight(0x8b5cf6, 8, 20);
+violetLight.position.set(-4, 4, -3);
+scene.add(violetLight);
+const coralLight = new THREE.PointLight(0xfb7185, 7, 18);
+coralLight.position.set(4, 1, -2);
+scene.add(coralLight);
 
 function box(w, h, d, r, color, metal = 0.35, rough = 0.28) {
   const m = new THREE.Mesh(
@@ -108,9 +114,10 @@ shuttle.add(roof);
 scene.add(shuttle);
 
 const rings = [1.9, 2.55, 3.25].map((r, i) => {
+  const ringColors = [0x5eead4, 0x8b5cf6, 0xfb7185];
   const mesh = new THREE.Mesh(
     new THREE.TorusGeometry(r, 0.012, 10, 90),
-    new THREE.MeshBasicMaterial({ color: i === 1 ? 0x5eead4 : 0x94a3b8, transparent: true, opacity: 0.28 })
+    new THREE.MeshBasicMaterial({ color: ringColors[i], transparent: true, opacity: 0.38 })
   );
   scene.add(mesh);
   return mesh;
@@ -125,6 +132,7 @@ const shots = [
   { cam: [5.6, 2.3, 8.0], look: [-0.2, 1.0, 0], fov: 28 },
   { cam: [2.1, 1.25, 3.2], look: [1.4, 1.15, 0], fov: 20 },
   { cam: [-7.2, 1.7, 2.6], look: [0.1, 1.0, 0], fov: 30 },
+  { cam: [-1.8, 0.9, 2.3], look: [0.8, 1.05, 0], fov: 22 },
   { cam: [0.4, 5.4, -7.4], look: [0.0, 0.8, 0], fov: 36 },
   { cam: [8.6, 1.35, 1.2], look: [0.2, 0.95, 0], fov: 24 },
   { cam: [0.2, 2.4, 10.6], look: [0.0, 1.0, 0], fov: 32 },
