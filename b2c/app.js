@@ -1,221 +1,189 @@
-const copy = {
-  airport: {
-    kicker: "Airport corridors · meet & greet",
-    title: "Your chauffeur is already moving toward you.",
-    lede: "Track the flight, hold at arrivals, and open the door on time. Pickup and drop-off stay on one ticket.",
-    stamp: "Flight-aware",
-    quoteLabel: "Airport transfer fare",
-    pickup: "Taoyuan International Airport (TPE)",
-    dropoff: "Taipei 101, Xinyi",
-  },
-  p2p: {
-    kicker: "Door to door · city transfer",
-    title: "Point to point, without the waiting game.",
-    lede: "Name the two doors. A professional driver takes the shortest quiet route between them.",
-    stamp: "Fixed fare",
-    quoteLabel: "Point-to-point fare",
-    pickup: "Grand Hyatt Taipei",
-    dropoff: "Jiufen Old Street",
-  },
-  hourly: {
-    kicker: "Car with driver · on standby",
-    title: "Keep the car. Keep the driver. Keep the day.",
-    lede: "From meetings to dinner, the same chauffeur stays with you. Pickup, drop-off, and hours on one form.",
-    stamp: "Hourly charter",
-    quoteLabel: "With-driver fare",
-    pickup: "Songshan Airport (TSA)",
-    dropoff: "Grand Hyatt Taipei",
-  },
-  multi: {
-    kicker: "Corridor travel · several cities",
-    title: "Several cities. One car. One driver.",
-    lede: "String Taipei, Taichung, Tainan into a single movement. Add cities without leaving this ticket.",
-    stamp: "Multi-city",
-    quoteLabel: "Multi-city fare",
-    pickup: "Taipei",
-    dropoff: "Kaohsiung",
-  },
-};
-
-const modes = ["airport", "p2p", "hourly", "multi"];
-const tabs = [...document.querySelectorAll(".tab")];
-const ink = document.getElementById("tabInk");
-const pickup = document.getElementById("pickup");
-const dropoff = document.getElementById("dropoff");
-const hours = document.getElementById("hours");
-const pax = document.getElementById("pax");
-const flight = document.getElementById("flight");
-const when = document.getElementById("when");
-const fareEl = document.getElementById("fare");
-const stops = document.getElementById("stops");
+const figure = document.getElementById("codireFigure");
+const shell = document.getElementById("canvasShell");
 const toast = document.getElementById("toast");
+const stageButtons = [...document.querySelectorAll(".stage-button")];
+let zoom = 1;
+let toastTimer;
 
-function nextHour() {
-  const d = new Date();
-  d.setMinutes(0, 0, 0);
-  d.setHours(d.getHours() + 3);
-  const pad = (n) => String(n).padStart(2, "0");
-  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+function notify(message) {
+  clearTimeout(toastTimer);
+  toast.textContent = message;
+  toast.classList.add("show");
+  toastTimer = setTimeout(() => toast.classList.remove("show"), 2800);
 }
 
-when.value = nextHour();
-
-function placeInk(btn) {
-  const parent = btn.parentElement.getBoundingClientRect();
-  const box = btn.getBoundingClientRect();
-  ink.style.width = `${box.width}px`;
-  ink.style.left = `${box.left - parent.left}px`;
-  ink.style.transform = "none";
-}
-
-function setCopy(mode) {
-  const c = copy[mode];
-  document.querySelector('[data-copy="kicker"]').textContent = c.kicker;
-  document.querySelector('[data-copy="title"]').textContent = c.title;
-  document.querySelector('[data-copy="lede"]').textContent = c.lede;
-  document.querySelector('[data-copy="stamp"]').textContent = c.stamp;
-  document.querySelector('[data-copy="quoteLabel"]').textContent = c.quoteLabel;
-  pickup.placeholder = c.pickup;
-  dropoff.placeholder = c.dropoff;
-  if (!pickup.value) pickup.value = c.pickup;
-  if (!dropoff.value) dropoff.value = c.dropoff;
-}
-
-function quote() {
-  const mode = document.body.dataset.mode;
-  const people = Number(pax.value) || 1;
-  const extra = people > 3 ? 300 : 0;
-  let n = 2280;
-  if (mode === "airport") n = 2280 + extra + (flight.value ? 0 : 80);
-  if (mode === "p2p") n = 1680 + extra;
-  if (mode === "hourly") n = 880 * Math.max(2, Number(hours.value) || 4) + extra;
-  if (mode === "multi") n = 2480 + extra + stops.querySelectorAll("input").length * 900;
-  fareEl.animate([{ transform: "translateY(6px)", opacity: 0.4 }, { transform: "none", opacity: 1 }], {
-    duration: 280,
-    easing: "ease-out",
+function selectStage(stage) {
+  figure.dataset.focus = stage;
+  stageButtons.forEach((button) => {
+    const selected = button.dataset.stage === stage;
+    button.classList.toggle("is-active", selected);
+    button.setAttribute("aria-pressed", selected ? "true" : "false");
   });
-  fareEl.textContent = `NT$${n.toLocaleString()}`;
 }
 
-function activate(mode, btn) {
-  document.body.dataset.mode = mode;
-  tabs.forEach((t) => {
-    const on = t === btn;
-    t.classList.toggle("is-active", on);
-    t.setAttribute("aria-selected", on ? "true" : "false");
-  });
-  const c = copy[mode];
-  pickup.value = c.pickup;
-  dropoff.value = c.dropoff;
-  setCopy(mode);
-  placeInk(btn);
-  quote();
-}
-
-tabs.forEach((btn) => {
-  btn.addEventListener("click", () => activate(btn.dataset.mode, btn));
+stageButtons.forEach((button) => {
+  button.addEventListener("click", () => selectStage(button.dataset.stage));
 });
 
-document.getElementById("direction").addEventListener("click", (e) => {
-  const b = e.target.closest("button");
-  if (!b) return;
-  [...e.currentTarget.children].forEach((x) => x.classList.toggle("is-on", x === b));
-  if (b.dataset.dir === "arrival") {
-    pickup.value = "Taoyuan International Airport (TPE)";
-    dropoff.value = "Taipei 101, Xinyi";
-  } else {
-    pickup.value = "Taipei 101, Xinyi";
-    dropoff.value = "Taoyuan International Airport (TPE)";
+figure.querySelectorAll(".stage").forEach((stage) => {
+  stage.addEventListener("click", () => selectStage(stage.dataset.stage));
+});
+
+document.getElementById("showNumbers").addEventListener("change", (event) => {
+  figure.classList.toggle("hide-numbers", !event.target.checked);
+});
+
+document.getElementById("showNotation").addEventListener("change", (event) => {
+  figure.classList.toggle("hide-notation", !event.target.checked);
+});
+
+document.getElementById("highContrast").addEventListener("change", (event) => {
+  figure.classList.toggle("high-contrast", event.target.checked);
+});
+
+function applyZoom(nextZoom) {
+  zoom = Math.min(1.8, Math.max(.7, nextZoom));
+  figure.style.width = `${zoom * 100}%`;
+  document.getElementById("zoomLabel").textContent = `${Math.round(zoom * 100)}%`;
+}
+
+document.getElementById("zoomIn").addEventListener("click", () => applyZoom(zoom + .1));
+document.getElementById("zoomOut").addEventListener("click", () => applyZoom(zoom - .1));
+document.getElementById("resetView").addEventListener("click", () => {
+  applyZoom(1);
+  selectStage("all");
+  shell.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+});
+
+function collectStyles() {
+  let css = "";
+  [...document.styleSheets].forEach((sheet) => {
+    try {
+      [...sheet.cssRules].forEach((rule) => {
+        css += `${rule.cssText}\n`;
+      });
+    } catch {
+      // Cross-origin font styles are not required for the standalone artwork.
+    }
+  });
+  return css;
+}
+
+function serializedFigure() {
+  const clone = figure.cloneNode(true);
+  clone.removeAttribute("style");
+  clone.setAttribute("width", "1600");
+  clone.setAttribute("height", "900");
+  clone.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+  const style = document.createElementNS("http://www.w3.org/2000/svg", "style");
+  style.textContent = collectStyles();
+  clone.insertBefore(style, clone.firstChild);
+  return `<?xml version="1.0" encoding="UTF-8"?>\n${new XMLSerializer().serializeToString(clone)}`;
+}
+
+function download(blob, filename) {
+  const url = URL.createObjectURL(blob);
+  const anchor = document.createElement("a");
+  anchor.href = url;
+  anchor.download = filename;
+  document.body.appendChild(anchor);
+  anchor.click();
+  anchor.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+document.getElementById("exportSvg").addEventListener("click", () => {
+  const blob = new Blob([serializedFigure()], { type: "image/svg+xml;charset=utf-8" });
+  download(blob, "CoDiRe_Figure_1_vector.svg");
+  notify("Vector SVG exported · fully scalable");
+});
+
+function crc32(bytes) {
+  let crc = 0xffffffff;
+  for (let i = 0; i < bytes.length; i += 1) {
+    crc ^= bytes[i];
+    for (let bit = 0; bit < 8; bit += 1) {
+      crc = (crc >>> 1) ^ ((crc & 1) ? 0xedb88320 : 0);
+    }
   }
-  quote();
-});
+  return (crc ^ 0xffffffff) >>> 0;
+}
 
-document.getElementById("swap").addEventListener("click", () => {
-  const a = pickup.value;
-  pickup.value = dropoff.value;
-  dropoff.value = a;
-  document.getElementById("swap").animate([{ transform: "rotate(180deg)" }, { transform: "none" }], { duration: 360 });
-  quote();
-});
+function uint32(value) {
+  return new Uint8Array([
+    (value >>> 24) & 255,
+    (value >>> 16) & 255,
+    (value >>> 8) & 255,
+    value & 255,
+  ]);
+}
 
-document.getElementById("addStop").addEventListener("click", () => {
-  const cities = ["Taichung", "Sun Moon Lake", "Tainan", "Alishan", "Hualien"];
-  const used = [...stops.querySelectorAll("input")].map((i) => i.value);
-  const next = cities.find((c) => !used.includes(c)) || `City ${used.length + 1}`;
-  const row = document.createElement("div");
-  row.className = "stop-row field";
-  row.innerHTML = `<label class="field" style="margin:0;width:100%"><span>City stop</span><input value="${next}" /></label><button type="button" aria-label="Remove stop">Remove</button>`;
-  row.querySelector("button").onclick = () => {
-    row.remove();
-    quote();
-  };
-  row.querySelector("input").addEventListener("input", quote);
-  stops.appendChild(row);
-  quote();
-});
+function pngChunk(type, data) {
+  const typeBytes = new TextEncoder().encode(type);
+  const crcInput = new Uint8Array(typeBytes.length + data.length);
+  crcInput.set(typeBytes);
+  crcInput.set(data, typeBytes.length);
+  const chunk = new Uint8Array(12 + data.length);
+  chunk.set(uint32(data.length), 0);
+  chunk.set(typeBytes, 4);
+  chunk.set(data, 8);
+  chunk.set(uint32(crc32(crcInput)), 8 + data.length);
+  return chunk;
+}
 
-["input", "change"].forEach((ev) => {
-  document.getElementById("bookForm").addEventListener(ev, quote);
-});
+async function addDpiMetadata(blob, dpi) {
+  const png = new Uint8Array(await blob.arrayBuffer());
+  const pixelsPerMeter = Math.round(dpi / .0254);
+  const data = new Uint8Array(9);
+  data.set(uint32(pixelsPerMeter), 0);
+  data.set(uint32(pixelsPerMeter), 4);
+  data[8] = 1;
+  const chunk = pngChunk("pHYs", data);
+  const output = new Uint8Array(png.length + chunk.length);
+  output.set(png.slice(0, 33), 0);
+  output.set(chunk, 33);
+  output.set(png.slice(33), 33 + chunk.length);
+  return new Blob([output], { type: "image/png" });
+}
 
-document.getElementById("bookForm").addEventListener("submit", (e) => {
-  e.preventDefault();
-  const mode = document.body.dataset.mode;
-  const label = tabs.find((t) => t.dataset.mode === mode).textContent.trim();
-  toast.hidden = false;
-  toast.textContent = `${label}: ${pickup.value} → ${dropoff.value} · ${fareEl.textContent}`;
-  toast.animate([{ opacity: 0, transform: "translate(-50%, 12px)" }, { opacity: 1, transform: "translate(-50%, 0)" }], {
-    duration: 280,
-    fill: "forwards",
+function canvasBlob(canvas) {
+  return new Promise((resolve, reject) => {
+    canvas.toBlob((blob) => blob ? resolve(blob) : reject(new Error("PNG encoding failed")), "image/png");
   });
-  setTimeout(() => {
-    toast.hidden = true;
-  }, 3200);
-});
+}
 
-const count = document.querySelector(".count");
-setInterval(() => {
-  const n = 18 + Math.floor(Math.random() * 12);
-  count.textContent = n;
-}, 2600);
-
-window.addEventListener("resize", () => placeInk(document.querySelector(".tab.is-active")));
-placeInk(document.querySelector(".tab.is-active"));
-setCopy("airport");
-pickup.value = copy.airport.pickup;
-dropoff.value = copy.airport.dropoff;
-quote();
-
-(function cursorFollow() {
-  const cursor = document.getElementById("cursor");
-  if (!cursor) return;
-  let x = innerWidth / 2;
-  let y = innerHeight / 2;
-  let cx = x;
-  let cy = y;
-  window.addEventListener("pointermove", (e) => {
-    x = e.clientX;
-    y = e.clientY;
-    cursor.classList.toggle("is-link", Boolean(e.target.closest("button, a, input, .tab")));
-  });
-  function follow() {
-    cx += (x - cx) * 0.22;
-    cy += (y - cy) * 0.22;
-    cursor.style.transform = `translate(${cx}px, ${cy}px)`;
-    requestAnimationFrame(follow);
+document.getElementById("exportPng").addEventListener("click", async (event) => {
+  const button = event.currentTarget;
+  button.disabled = true;
+  button.textContent = "Rendering 6400 × 3600…";
+  try {
+    await document.fonts.ready;
+    const source = new Blob([serializedFigure()], { type: "image/svg+xml;charset=utf-8" });
+    const sourceUrl = URL.createObjectURL(source);
+    const image = new Image();
+    await new Promise((resolve, reject) => {
+      image.onload = resolve;
+      image.onerror = () => reject(new Error("The SVG could not be rasterized"));
+      image.src = sourceUrl;
+    });
+    const canvas = document.createElement("canvas");
+    canvas.width = 6400;
+    canvas.height = 3600;
+    const context = canvas.getContext("2d", { alpha: false });
+    context.fillStyle = "#ffffff";
+    context.fillRect(0, 0, canvas.width, canvas.height);
+    context.drawImage(image, 0, 0, canvas.width, canvas.height);
+    URL.revokeObjectURL(sourceUrl);
+    const png = await addDpiMetadata(await canvasBlob(canvas), 900);
+    download(png, "CoDiRe_Figure_1_900DPI.png");
+    notify("900-DPI PNG exported · 6400 × 3600 px");
+  } catch (error) {
+    console.error(error);
+    notify("Export failed. Use SVG export as the publication-safe fallback.");
+  } finally {
+    button.disabled = false;
+    button.innerHTML = "<span>Export</span> PNG · 900 DPI";
   }
-  follow();
-})();
-
-document.getElementById("zoomIn")?.addEventListener("click", () => window.fleetCam?.zoomIn());
-document.getElementById("zoomOut")?.addEventListener("click", () => window.fleetCam?.zoomOut());
-document.getElementById("panLeft")?.addEventListener("click", () => window.fleetCam?.pan(-1));
-document.getElementById("panRight")?.addEventListener("click", () => window.fleetCam?.pan(1));
-
-document.addEventListener("keydown", (e) => {
-  if (!["ArrowLeft", "ArrowRight"].includes(e.key)) return;
-  if (!e.target.classList.contains("tab") && e.target !== document.body) return;
-  const i = modes.indexOf(document.body.dataset.mode);
-  const next = modes[(i + (e.key === "ArrowRight" ? 1 : -1) + modes.length) % modes.length];
-  activate(next, tabs.find((t) => t.dataset.mode === next));
 });
+
+selectStage("all");

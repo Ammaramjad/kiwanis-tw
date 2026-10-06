@@ -1,173 +1,331 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Fleet OS · Book a chauffeur</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600;700;800&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="./styles.css" />
-  </head>
-  <body data-mode="airport">
-    <div class="noise" aria-hidden="true"></div>
-    <div class="cursor" id="cursor" aria-hidden="true"></div>
-    <canvas id="scene" class="scene" aria-hidden="true"></canvas>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#f3f5f8" />
+  <title>CoDiRe · Figure 1 Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
+      <div><strong>CoDiRe</strong><small>Figure 01 studio</small></div>
+    </div>
+    <div class="document-meta">
+      <span class="status-dot"></span>
+      <span>Manuscript figure</span>
+      <b>1600 × 900</b>
+    </div>
+    <div class="actions">
+      <button class="button ghost" id="resetView" type="button">Reset view</button>
+      <button class="button secondary" id="exportSvg" type="button">Export SVG</button>
+      <button class="button primary" id="exportPng" type="button"><span>Export</span> PNG · 900 DPI</button>
+    </div>
+  </header>
 
-    <header class="topbar">
-      <div class="brand">
-        <span class="mark"></span>
-        <div>
-          <strong>Fleet OS</strong>
-          <small>Night corridor booking</small>
+  <main class="workspace">
+    <aside class="inspector" aria-label="Figure controls">
+      <section>
+        <p class="eyebrow">Navigate</p>
+        <h1>Architecture overview</h1>
+        <p class="intro">Select a stage to isolate its role in CoDiRe’s training and deployment pipeline.</p>
+        <div class="stage-list" id="stageList">
+          <button class="stage-button is-active" data-stage="all"><b>00</b><span><strong>Complete system</strong><small>All interfaces</small></span></button>
+          <button class="stage-button" data-stage="1"><b>01</b><span><strong>Shared backbone</strong><small>Source encoding</small></span></button>
+          <button class="stage-button" data-stage="2"><b>02</b><span><strong>Recombination</strong><small>Retain + replace</small></span></button>
+          <button class="stage-button" data-stage="3"><b>03</b><span><strong>Compatibility</strong><small>Frozen semantic gate</small></span></button>
+          <button class="stage-button" data-stage="4"><b>04</b><span><strong>Donor policy</strong><small>Detached optimization</small></span></button>
+          <button class="stage-button" data-stage="5"><b>05</b><span><strong>Shared prediction</strong><small>Candidate re-masked</small></span></button>
+          <button class="stage-button" data-stage="6"><b>06</b><span><strong>Student objective</strong><small>Joint update</small></span></button>
+        </div>
+      </section>
+
+      <section class="display-settings">
+        <p class="eyebrow">Display</p>
+        <label class="toggle-row"><span>Stage annotations</span><input id="showNumbers" type="checkbox" checked /><i></i></label>
+        <label class="toggle-row"><span>Technical notation</span><input id="showNotation" type="checkbox" checked /><i></i></label>
+        <label class="toggle-row"><span>High contrast</span><input id="highContrast" type="checkbox" /><i></i></label>
+      </section>
+
+      <section class="export-spec">
+        <div><p class="eyebrow">Output specification</p><span class="dpi-badge">900 <small>DPI</small></span></div>
+        <dl>
+          <div><dt>Raster size</dt><dd>6400 × 3600 px</dd></div>
+          <div><dt>Print size</dt><dd>7.11 × 4.00 in</dd></div>
+          <div><dt>Color</dt><dd>RGB · white ground</dd></div>
+        </dl>
+      </section>
+    </aside>
+
+    <section class="figure-area">
+      <div class="figure-header">
+        <div><span class="figure-index">FIGURE 01</span><h2>Compatibility-constrained representation learning</h2></div>
+        <div class="legend" aria-label="Color legend">
+          <span><i class="trainable"></i>Trainable</span>
+          <span><i class="frozen"></i>Frozen / detached</span>
+          <span><i class="objective"></i>Objective</span>
         </div>
       </div>
-      <nav class="nav">
-        <a href="#book">Book</a>
-        <a href="#services">Services</a>
-        <a href="#flow">Flow</a>
-        <a href="#fleet">Fleet</a>
-        <a href="#cities">Cities</a>
-      </nav>
-      <div class="cam-controls">
-        <button type="button" id="panLeft" aria-label="Pan left">←</button>
-        <button type="button" id="zoomOut" aria-label="Zoom out">−</button>
-        <button type="button" id="zoomIn" aria-label="Zoom in">+</button>
-        <button type="button" id="panRight" aria-label="Pan right">→</button>
+
+      <div class="canvas-shell" id="canvasShell">
+        <svg id="codireFigure" viewBox="0 0 1600 900" role="img" aria-labelledby="figureTitle figureDesc" xmlns="http://www.w3.org/2000/svg">
+          <title id="figureTitle">CoDiRe architecture and learning interfaces</title>
+          <desc id="figureDesc">A six-stage diagram showing source images encoded by a shared backbone, masked feature recombination, frozen compatibility filtering, detached donor optimization, a shared factual and candidate prediction path, and the student objective. Deployment retains only the backbone, mask, and classifier.</desc>
+          <defs>
+            <filter id="shadow" x="-20%" y="-20%" width="140%" height="150%">
+              <feDropShadow dx="0" dy="7" stdDeviation="9" flood-color="#10243e" flood-opacity=".10" />
+            </filter>
+            <filter id="softShadow" x="-20%" y="-20%" width="140%" height="150%">
+              <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#10243e" flood-opacity=".09" />
+            </filter>
+            <linearGradient id="navyGrad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#173f68" /><stop offset="1" stop-color="#0b2948" />
+            </linearGradient>
+            <linearGradient id="tealGrad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#1aa7a0" /><stop offset="1" stop-color="#087873" />
+            </linearGradient>
+            <linearGradient id="orangeGrad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#ffb44a" /><stop offset="1" stop-color="#eb7f25" />
+            </linearGradient>
+            <pattern id="dotPattern" width="26" height="26" patternUnits="userSpaceOnUse">
+              <circle cx="2" cy="2" r="1.5" fill="#b8c4d2" opacity=".36" />
+            </pattern>
+            <marker id="arrowNavy" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0l10 5-10 5z" fill="#173f68" /></marker>
+            <marker id="arrowTeal" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0l10 5-10 5z" fill="#0b8d87" /></marker>
+            <marker id="arrowOrange" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0l10 5-10 5z" fill="#ee8a2d" /></marker>
+            <symbol id="imageAnchor" viewBox="0 0 100 72">
+              <rect width="100" height="72" rx="9" fill="#dbe9f2" />
+              <circle cx="76" cy="19" r="9" fill="#f3b85c" />
+              <path d="M0 58l26-25 15 14 14-11 45 36H0z" fill="#87acbf" />
+              <path d="M0 68l34-23 20 13 16-9 30 19v4H0z" fill="#496f89" opacity=".8" />
+            </symbol>
+            <symbol id="imageDonor" viewBox="0 0 100 72">
+              <rect width="100" height="72" rx="9" fill="#e4ece4" />
+              <circle cx="22" cy="18" r="9" fill="#efb667" />
+              <path d="M0 56l20-18 14 10 22-24 44 41v7H0z" fill="#78a69c" />
+              <path d="M0 67l31-19 18 12 18-8 33 15v5H0z" fill="#376e67" opacity=".76" />
+            </symbol>
+          </defs>
+
+          <rect class="figure-bg" width="1600" height="900" rx="26" fill="#fbfcfe" />
+          <rect width="1600" height="900" rx="26" fill="url(#dotPattern)" opacity=".38" />
+
+          <g class="stage" data-stage="1">
+            <text class="lane-label" x="52" y="63">SOURCE-ONLY TRAINING</text>
+            <g class="number-tag"><circle cx="69" cy="138" r="24" /><text x="69" y="145">01</text></g>
+            <text class="stage-title" x="108" y="132">Shared backbone</text>
+            <text class="stage-subtitle" x="108" y="154">Same-class source pair</text>
+            <g filter="url(#softShadow)">
+              <rect class="card" x="52" y="185" width="190" height="232" rx="18" />
+              <use href="#imageAnchor" x="67" y="201" width="160" height="115" />
+              <rect class="chip navy" x="68" y="332" width="73" height="25" rx="12" />
+              <text class="chip-text" x="104" y="349">ANCHOR i</text>
+              <text class="body-strong" x="68" y="383">Source image xᵢ</text>
+              <text class="tiny" x="68" y="403">label yᵢ · domain e₁</text>
+            </g>
+            <g filter="url(#softShadow)">
+              <rect class="card" x="52" y="440" width="190" height="232" rx="18" />
+              <use href="#imageDonor" x="67" y="456" width="160" height="115" />
+              <rect class="chip teal" x="68" y="587" width="73" height="25" rx="12" />
+              <text class="chip-text" x="104" y="604">DONOR j</text>
+              <text class="body-strong" x="68" y="638">Source image xⱼ</text>
+              <text class="tiny" x="68" y="658">same yᵢ · domain e₂</text>
+            </g>
+            <path class="arrow navy-line" d="M242 301H276M242 556H276" />
+            <g filter="url(#shadow)">
+              <rect x="276" y="251" width="166" height="357" rx="24" fill="url(#navyGrad)" />
+              <g transform="translate(319 289)" stroke="#fff" fill="none" stroke-width="5" opacity=".9">
+                <path d="M0 20h80M10 0v40M31 7v26M53 12v16M70 5v30" />
+                <circle cx="16" cy="85" r="8" fill="#fff" stroke="none" />
+                <circle cx="40" cy="85" r="8" fill="#fff" stroke="none" opacity=".75" />
+                <circle cx="64" cy="85" r="8" fill="#fff" stroke="none" opacity=".5" />
+              </g>
+              <text class="block-kicker light" x="359" y="419">SHARED ENCODER</text>
+              <text class="block-title light" x="359" y="453">ResNet-50</text>
+              <text class="block-sub light" x="359" y="482">Fθ(x)</text>
+              <path d="M300 514h118" stroke="#fff" opacity=".2" />
+              <text class="mono light" x="359" y="548">u ∈ ℝ²⁰⁴⁸</text>
+              <text class="tiny light" x="359" y="573">trainable</text>
+            </g>
+          </g>
+
+          <path class="arrow navy-line interstage" d="M442 430H487" />
+
+          <g class="stage" data-stage="2">
+            <g class="number-tag"><circle cx="511" cy="138" r="24" /><text x="511" y="145">02</text></g>
+            <text class="stage-title" x="550" y="132">Feature recombination</text>
+            <text class="stage-subtitle" x="550" y="154">Learned coordinate partition</text>
+            <g filter="url(#shadow)">
+              <rect class="card" x="487" y="185" width="280" height="487" rx="24" />
+              <text class="block-kicker" x="515" y="220">INPUT-DEPENDENT MASK</text>
+              <g transform="translate(515 248)">
+                <rect width="224" height="66" rx="12" fill="#edf2f7" />
+                <g fill="#173f68"><rect x="8" y="9" width="18" height="48" rx="4" /><rect x="32" y="18" width="18" height="39" rx="4" /><rect x="56" y="8" width="18" height="49" rx="4" /><rect x="80" y="27" width="18" height="30" rx="4" /><rect x="104" y="13" width="18" height="44" rx="4" /></g>
+                <g fill="#15958f"><rect x="128" y="23" width="18" height="34" rx="4" /><rect x="152" y="10" width="18" height="47" rx="4" /><rect x="176" y="30" width="18" height="27" rx="4" /><rect x="200" y="16" width="18" height="41" rx="4" /></g>
+              </g>
+              <text class="mono notation" x="515" y="346">mφ(u) = σ(aφ(u)/Tₘ)</text>
+              <path d="M515 375h224" stroke="#d7dee8" />
+              <g transform="translate(515 402)">
+                <rect width="105" height="102" rx="14" fill="#e9f0f7" stroke="#b8cbe0" />
+                <circle cx="20" cy="23" r="6" fill="#173f68" /><text class="mini-label" x="34" y="27">RETAIN</text>
+                <text class="vector-label" x="52" y="62">cᵢ</text>
+                <text class="mono notation" x="52" y="84">mᵢ ⊙ uᵢ</text>
+                <rect x="119" width="105" height="102" rx="14" fill="#e2f4f2" stroke="#98d3ce" />
+                <circle cx="139" cy="23" r="6" fill="#15958f" /><text class="mini-label" x="153" y="27">REPLACE</text>
+                <text class="vector-label" x="171" y="62">sⱼ</text>
+                <text class="mono notation" x="171" y="84">(1−mⱼ)⊙uⱼ</text>
+              </g>
+              <path class="arrow navy-line" d="M567 517v45M687 517v45" />
+              <rect x="515" y="562" width="224" height="78" rx="16" fill="#f5f7fb" stroke="#9fb2c7" stroke-width="1.5" />
+              <text class="block-kicker" x="627" y="586">RECOMBINED FEATURE</text>
+              <text class="equation notation" x="627" y="620">vᵢⱼ = cᵢ + sⱼ</text>
+            </g>
+          </g>
+
+          <path class="arrow teal-line interstage" d="M767 430H812" />
+
+          <g class="stage" data-stage="3">
+            <g class="number-tag teal-tag"><circle cx="836" cy="138" r="24" /><text x="836" y="145">03</text></g>
+            <text class="stage-title" x="875" y="132">Frozen compatibility</text>
+            <text class="stage-subtitle" x="875" y="154">Candidate eligibility rule</text>
+            <g filter="url(#shadow)">
+              <rect x="812" y="185" width="276" height="241" rx="24" fill="url(#tealGrad)" />
+              <g transform="translate(839 218)">
+                <path d="M0 13l19-8 19 8v17c0 16-10 27-19 31C10 57 0 46 0 30z" fill="none" stroke="#fff" stroke-width="4" />
+                <path d="M11 31l6 6 12-16" fill="none" stroke="#fff" stroke-width="4" />
+              </g>
+              <text class="block-kicker light" x="893" y="239">SEMANTIC TEACHER t</text>
+              <text class="block-title light" x="839" y="294">Is donor j compatible?</text>
+              <g class="notation">
+                <rect x="839" y="319" width="222" height="36" rx="9" fill="#fff" opacity=".13" />
+                <text class="mono light" x="950" y="342">tᵧᵢ(vᵢⱼ) ≥ γ</text>
+                <rect x="839" y="364" width="222" height="36" rx="9" fill="#fff" opacity=".13" />
+                <text class="mono light" x="950" y="387">‖b(vᵢⱼ)−b(uᵢ)‖₂ ≤ rᵦ</text>
+              </g>
+            </g>
+            <path class="arrow teal-line" d="M950 426v36" />
+            <g filter="url(#softShadow)">
+              <rect class="card" x="812" y="462" width="276" height="91" rx="18" />
+              <circle cx="849" cy="507" r="18" fill="#dff4f1" />
+              <path d="M840 507l6 6 13-14" fill="none" stroke="#0b8d87" stroke-width="4" />
+              <text class="body-strong" x="878" y="501">Accepted donor set</text>
+              <text class="tiny" x="878" y="523">q⁰ = uniform over eligible donors</text>
+            </g>
+            <g class="warning">
+              <path d="M825 596h12l8-10 8 20 8-10h14" fill="none" stroke="#8e9bab" stroke-width="2.5" />
+              <text class="tiny" x="889" y="602">Acceptance ≠ semantic proof</text>
+            </g>
+          </g>
+
+          <path class="arrow teal-line interstage" d="M1088 430H1133" />
+
+          <g class="stage" data-stage="4">
+            <g class="number-tag teal-tag"><circle cx="1157" cy="138" r="24" /><text x="1157" y="145">04</text></g>
+            <text class="stage-title" x="1196" y="132">Detached donor policy</text>
+            <text class="stage-subtitle" x="1196" y="154">Constrained optimization</text>
+            <g filter="url(#shadow)">
+              <rect class="card teal-outline" x="1133" y="185" width="415" height="369" rx="24" />
+              <text class="block-kicker teal-text" x="1162" y="223">OPTIMIZE qᵢ · THEN DETACH</text>
+              <text class="equation left notation" x="1162" y="271">max  Σⱼ qᵢⱼ dᵢⱼ + β log det(Gᵢ(q)+εI)</text>
+              <g transform="translate(1162 304)">
+                <rect width="170" height="60" rx="13" fill="#eef8f7" />
+                <path d="M18 43l25-19 25 10 25-22 25 17 25-9" fill="none" stroke="#0b8d87" stroke-width="3" />
+                <text class="mini-label" x="85" y="53">DIFFICULTY</text>
+                <rect x="187" width="170" height="60" rx="13" fill="#eef8f7" />
+                <circle cx="221" cy="25" r="17" fill="none" stroke="#0b8d87" stroke-width="3" />
+                <path d="M221 8v34M204 25h34M209 13l24 24M233 13l-24 24" stroke="#0b8d87" stroke-width="1.6" opacity=".6" />
+                <text class="mini-label" x="272" y="53">DIVERSITY</text>
+              </g>
+              <text class="block-kicker" x="1162" y="407">CONSTRAINTS</text>
+              <g class="policy-pills">
+                <rect x="1162" y="425" width="96" height="34" rx="17" /><text x="1210" y="447">Σ q = 1</text>
+                <rect x="1267" y="425" width="116" height="34" rx="17" /><text x="1325" y="447">q ≤ qₘₐₓ</text>
+                <rect x="1392" y="425" width="126" height="34" rx="17" /><text x="1455" y="447">KL(q ‖ q⁰) ≤ ρ</text>
+              </g>
+              <path d="M1162 486h356" stroke="#d7dee8" />
+              <circle cx="1175" cy="516" r="6" fill="#0b8d87" />
+              <text class="tiny" x="1191" y="521">Feasible pool → policy-weighted candidates</text>
+              <circle cx="1402" cy="516" r="6" fill="#c2cad4" />
+              <text class="tiny" x="1418" y="521">Else identity fallback</text>
+            </g>
+          </g>
+
+          <path class="flow-connector teal-line" d="M1339 554v43c0 22-18 40-40 40H931" />
+          <path class="flow-connector navy-line" d="M627 672v18c0 20 16 36 36 36h104" />
+
+          <g class="stage" data-stage="5">
+            <g class="number-tag"><circle cx="791" cy="726" r="24" /><text x="791" y="733">05</text></g>
+            <text class="stage-title" x="830" y="720">Shared prediction path</text>
+            <text class="stage-subtitle" x="830" y="742">The complete candidate is masked again</text>
+            <g filter="url(#shadow)">
+              <rect x="767" y="770" width="515" height="91" rx="22" fill="url(#navyGrad)" />
+              <g class="prediction-node"><circle cx="811" cy="815" r="23" /><text x="811" y="820">uᵢ</text></g>
+              <g class="prediction-node candidate"><circle cx="873" cy="815" r="23" /><text x="873" y="820">vᵢⱼ</text></g>
+              <path d="M901 815h36" stroke="#fff" stroke-width="2.5" marker-end="url(#arrowNavy)" />
+              <rect x="949" y="791" width="107" height="48" rx="12" fill="#fff" opacity=".13" />
+              <text class="block-sub light" x="1002" y="812">mask mφ</text><text class="tiny light" x="1002" y="830">applied again</text>
+              <path d="M1056 815h33" stroke="#fff" stroke-width="2.5" marker-end="url(#arrowNavy)" />
+              <rect x="1101" y="791" width="83" height="48" rx="12" fill="#fff" opacity=".13" />
+              <text class="block-sub light" x="1142" y="820">hψ</text>
+              <path d="M1184 815h30" stroke="#fff" stroke-width="2.5" marker-end="url(#arrowNavy)" />
+              <g transform="translate(1228 795)" fill="#fff"><rect y="26" width="9" height="17" rx="3" opacity=".45" /><rect x="15" y="15" width="9" height="28" rx="3" opacity=".7" /><rect x="30" width="9" height="43" rx="3" /></g>
+            </g>
+          </g>
+
+          <path class="arrow orange-line" d="M1282 815h47" />
+
+          <g class="stage" data-stage="6">
+            <g class="number-tag orange-tag"><circle cx="1354" cy="726" r="24" /><text x="1354" y="733">06</text></g>
+            <text class="stage-title" x="1393" y="720">Student objective</text>
+            <text class="stage-subtitle" x="1393" y="742">Update θ · φ · ψ</text>
+            <g filter="url(#shadow)">
+              <rect x="1329" y="770" width="219" height="91" rx="22" fill="url(#orangeGrad)" />
+              <text class="block-kicker light" x="1438" y="797">MINIMIZE</text>
+              <text class="equation light notation" x="1438" y="828">Lsup + λcf Lcf</text>
+              <text class="tiny light" x="1438" y="849">+ mask budget / binarization</text>
+            </g>
+          </g>
+
+          <g class="deployment">
+            <rect x="812" y="586" width="371" height="55" rx="14" fill="#fff" stroke="#b9c7d6" stroke-dasharray="6 5" />
+            <text class="block-kicker" x="839" y="608">DEPLOYMENT</text>
+            <text class="tiny" x="839" y="627">backbone → mask → classifier</text>
+            <text class="tiny teal-text" x="1159" y="616" text-anchor="end">teacher + solver removed</text>
+          </g>
+
+          <g class="annotation" transform="translate(52 713)">
+            <rect width="650" height="148" rx="20" fill="#fff" stroke="#d7dee8" />
+            <text class="block-kicker" x="24" y="32">GRADIENT &amp; INTERFACE KEY</text>
+            <g transform="translate(24 55)">
+              <path d="M0 12h54" class="navy-line" /><text class="tiny" x="68" y="17">student gradient path</text>
+              <path d="M232 12h54" class="teal-line" /><text class="tiny" x="300" y="17">frozen / detached interface</text>
+              <path d="M0 54h54" class="orange-line" /><text class="tiny" x="68" y="59">loss contribution</text>
+              <rect x="232" y="42" width="54" height="24" rx="8" fill="#f4f6f9" stroke="#bac5d1" stroke-dasharray="4 3" />
+              <text class="tiny" x="300" y="59">inference-only summary</text>
+            </g>
+          </g>
+        </svg>
+
+        <div class="zoom-controls" aria-label="Zoom controls">
+          <button id="zoomOut" type="button" aria-label="Zoom out">−</button>
+          <span id="zoomLabel">100%</span>
+          <button id="zoomIn" type="button" aria-label="Zoom in">+</button>
+        </div>
       </div>
-    </header>
 
-    <main class="app" id="app">
-      <section class="hero shot" id="book" data-shot="0">
-        <div class="copy">
-          <p class="kicker" data-copy="kicker">Airport corridors · meet & greet</p>
-          <h1 class="display-title" data-copy="title">Your chauffeur is already moving toward you.</h1>
-          <p class="lede" data-copy="lede">
-            Track the flight, hold at arrivals, and open the door on time. Pickup and drop-off stay on one ticket.
-          </p>
-        </div>
+      <footer class="caption">
+        <span>Fig. 1</span>
+        <p><strong>CoDiRe architecture and learning interfaces.</strong> Recombined features pass through the complete deployed mask–classifier path. Donor weights are optimized from frozen candidate statistics and detached before the student update. The teacher and donor solver are removed at inference.</p>
+      </footer>
+    </section>
+  </main>
 
-        <form class="ticket" id="bookForm" autocomplete="off">
-          <div class="ticket-head">
-            <span class="ticket-kicker">Book a movement</span>
-            <span class="ticket-stamp" data-copy="stamp">Fixed fare</span>
-          </div>
-          <div class="tabs" role="tablist" aria-label="Service categories">
-            <span class="tab-ink" id="tabInk"></span>
-            <button type="button" class="tab is-active" role="tab" aria-selected="true" data-mode="airport">Airport Transfer</button>
-            <button type="button" class="tab" role="tab" aria-selected="false" data-mode="p2p">Point to Point</button>
-            <button type="button" class="tab" role="tab" aria-selected="false" data-mode="hourly">With Driver Car</button>
-            <button type="button" class="tab" role="tab" aria-selected="false" data-mode="multi">Multiple City Trip</button>
-          </div>
-          <div class="fields">
-            <label class="field span-2" data-show="airport">
-              <span>Direction</span>
-              <div class="segment" id="direction">
-                <button type="button" class="is-on" data-dir="arrival">Arrival · airport pickup</button>
-                <button type="button" data-dir="departure">Departure · airport drop-off</button>
-              </div>
-            </label>
-            <div class="loc-row">
-              <label class="field">
-                <span>Pickup location</span>
-                <input id="pickup" name="pickup" required />
-              </label>
-              <button type="button" class="swap" id="swap" aria-label="Swap pickup and drop-off">⇅</button>
-              <label class="field">
-                <span>Drop-off location</span>
-                <input id="dropoff" name="dropoff" required />
-              </label>
-            </div>
-            <div class="stops" id="stops" data-show="multi" hidden></div>
-            <button type="button" class="add-stop" id="addStop" data-show="multi">+ Add another city</button>
-            <label class="field" data-show="hourly">
-              <span>Hours with driver</span>
-              <input id="hours" type="number" min="2" max="24" value="4" />
-            </label>
-            <label class="field" data-show="airport">
-              <span>Flight number</span>
-              <input id="flight" placeholder="BR156" />
-            </label>
-            <label class="field">
-              <span>Pickup date & time</span>
-              <input id="when" type="datetime-local" required />
-            </label>
-            <label class="field">
-              <span>Passengers</span>
-              <input id="pax" type="number" min="1" max="14" value="2" />
-            </label>
-          </div>
-          <div class="ticket-foot">
-            <div class="quote">
-              <small data-copy="quoteLabel">Estimated chauffeur fare</small>
-              <strong id="fare">NT$2,280</strong>
-            </div>
-            <button class="cta" type="submit"><span>See cars & confirm</span><i></i></button>
-          </div>
-        </form>
-      </section>
-
-      <section class="band shot" id="services" data-shot="1">
-        <p class="kicker">Four ways to move</p>
-        <h2>Every category keeps pickup and drop-off.</h2>
-        <div class="cards four">
-          <article><b>01</b><h3>Airport Transfer</h3><p>Flight-aware meet & greet. The shuttle waits at the door you name.</p></article>
-          <article><b>02</b><h3>Point to Point</h3><p>Two addresses. One quiet route. Fixed fare before you confirm.</p></article>
-          <article><b>03</b><h3>With Driver Car</h3><p>Keep the same chauffeur by the hour. Meetings, dinner, back.</p></article>
-          <article><b>04</b><h3>Multiple City Trip</h3><p>String cities on one ticket. The car does not change hands.</p></article>
-        </div>
-      </section>
-
-      <section class="band shot split" id="flow" data-shot="2">
-        <div>
-          <p class="kicker">How the corridor works</p>
-          <h2>Book. Track. Arrive. The shuttle stays in frame.</h2>
-        </div>
-        <ol class="steps">
-          <li><span>1</span><div><h3>Name the doors</h3><p>Pickup, drop-off, time, and passengers. The quote updates live.</p></div></li>
-          <li><span>2</span><div><h3>A car is assigned</h3><p>Dispatch picks from the live network — not a private handshake.</p></div></li>
-          <li><span>3</span><div><h3>The door opens</h3><p>Meet & greet, luggage, OTP. You never hunt for a plate.</p></div></li>
-        </ol>
-      </section>
-
-      <section class="band shot" id="fleet" data-shot="3">
-        <p class="kicker">The night fleet</p>
-        <h2>Same shuttle language. Different room inside.</h2>
-        <div class="cards three">
-          <article><h3>Sedan</h3><p>3 guests · 3 bags · city and airport.</p></article>
-          <article class="hi"><h3>MPV shuttle</h3><p>6 guests · 6 bags · the model you see moving.</p></article>
-          <article><h3>Van</h3><p>8 guests · family or crew with luggage.</p></article>
-        </div>
-      </section>
-
-      <section class="band shot cities" id="cities" data-shot="4">
-        <p class="kicker">East Asia corridors</p>
-        <h2>Routes people actually book.</h2>
-        <div class="city-grid">
-          <a>Taipei · TPE / 101</a>
-          <a>Taoyuan hub</a>
-          <a>Taichung · RMQ</a>
-          <a>Tainan old city</a>
-          <a>Kaohsiung · KHH</a>
-          <a>Hualien · Taroko</a>
-        </div>
-      </section>
-
-      <section class="band shot end" id="end" data-shot="5">
-        <p class="kicker">Ready when you are</p>
-        <h2>Zoom the shuttle. Then book the movement.</h2>
-        <a class="cta" href="#book">Back to booking</a>
-      </section>
-    </main>
-
-    <div class="toast" id="toast" hidden></div>
-    <script src="./app.js"></script>
-    <script type="importmap">
-      { "imports": { "three": "./vendor/three.module.js" } }
-    </script>
-    <script type="module" src="./scene.js"></script>
-  </body>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="./app.js"></script>
+</body>
 </html>
