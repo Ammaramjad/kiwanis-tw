@@ -20,5 +20,5 @@ Generated artifacts:
 
 - `artifacts/reported/verification.json`: recomputed printed-value arithmetic
 - `artifacts/reported/figure2_analytical.png`: independent analytical Figure 2
-- `artifacts/reported/figure3a_reported_benchmarks.png`: descriptive paper values
+- `artifacts/reported/figure3_reported_values.png`: all descriptive Figure 3 panels
 - `artifacts/smoke.json`: deterministic synthetic method execution

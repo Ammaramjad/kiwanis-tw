@@ -74,9 +74,10 @@ def analytical_figure(out: Path) -> dict:
     axes[0].set(xlabel="Direction α (degrees)", ylabel="Directional second moment")
     axes[0].legend()
     largest = np.linspace(0.5, 1.0, 251)
-    entropy = -(largest * np.log(largest) + np.where(
-        largest < 1, (1 - largest) * np.log(1 - largest), 0
-    ))
+    remainder = 1 - largest
+    entropy = -(largest * np.log(largest))
+    positive = remainder > 0
+    entropy[positive] -= remainder[positive] * np.log(remainder[positive])
     axes[1].plot(largest, np.exp(entropy))
     axes[1].set(xlabel="Largest eigenvalue λ", ylabel="Effective rank")
     fig.tight_layout()
@@ -95,15 +96,36 @@ def descriptive_figure(out: Path) -> None:
     methods = ["ERM", "SWAD", "CoDiRe"]
     x = np.arange(3)
     width = 0.24
-    fig, ax = plt.subplots(figsize=(7.5, 4))
+    fig, axes = plt.subplots(1, 3, figsize=(12, 3.6))
     for index, method in enumerate(methods):
-        ax.bar(x + (index - 1) * width, TABLE_IV[method], width, label=method)
-    ax.set_xticks(x, names)
-    ax.set_ylabel("Accuracy (%)")
-    ax.set_ylim(55, 100)
-    ax.legend()
+        axes[0].bar(x + (index - 1) * width, TABLE_IV[method], width, label=method)
+    axes[0].set_xticks(x, names, rotation=15)
+    axes[0].set_ylabel("Accuracy (%)")
+    axes[0].set_ylim(55, 100)
+    axes[0].set_title("(a) Printed benchmark means")
+    axes[0].legend(fontsize=8)
+    for name, values in BENCHMARKS.items():
+        values_array = np.asarray(values)
+        axes[1].plot(
+            np.arange(5),
+            values_array - values_array.mean(),
+            marker="o",
+            label=name,
+        )
+    axes[1].axhline(0, color="black", linewidth=0.7)
+    axes[1].set(
+        xlabel="Paper seed index",
+        ylabel="Deviation from mean (points)",
+        title="(b) Printed CoDiRe run deviations",
+    )
+    axes[1].legend(fontsize=8)
+    audit_names = ["Acceptance", "Agreement", "Feasible", "Fallback"]
+    audit_values = [74.6, 100 - (254 / 7460 * 100), 91.3, 8.7]
+    axes[2].bar(audit_names, audit_values)
+    axes[2].tick_params(axis="x", rotation=30)
+    axes[2].set(ylabel="Ratio (%)", ylim=(0, 100), title="(c) Printed PACS audit ratios")
     fig.tight_layout()
-    fig.savefig(out / "figure3a_reported_benchmarks.png", dpi=200)
+    fig.savefig(out / "figure3_reported_values.png", dpi=200)
     plt.close(fig)
 
 
