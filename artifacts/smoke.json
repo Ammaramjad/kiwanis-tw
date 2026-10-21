@@ -1,0 +1,39 @@
+{
+  "classification": "synthetic smoke execution; not a benchmark reproduction",
+  "seed": 42,
+  "environment": {
+    "platform": "Linux-6.12.94+-x86_64-with-glibc2.39",
+    "numpy": "2.5.4"
+  },
+  "configuration": {
+    "seed": 42,
+    "anchors": 24,
+    "donors": 10,
+    "dimension": 32,
+    "output": "artifacts/smoke.json"
+  },
+  "audit": {
+    "attempted_candidates": 240,
+    "accepted_candidates": 216,
+    "acceptance": 0.9,
+    "prediction_disagreements": 28,
+    "conditional_disagreement": 0.12962962962962962,
+    "anchors": 24,
+    "feasible_anchors": 24,
+    "feasible_rate": 1.0,
+    "identity_fallback_anchors": 0,
+    "identity_fallback_rate": 0.0
+  },
+  "feasible_policy_mean_effective_donors": 6.8150581018026415,
+  "mean_geometry": {
+    "trace": 1.0470223440287312,
+    "effective_rank": 4.500929375751995
+  },
+  "solver_uniform_fallbacks": 0,
+  "maximum_constraint_residual": 7.402358508379336e-07,
+  "identity_checks": {
+    "self_recombination_max_abs_error": 4.440892098500626e-16,
+    "exact_bypass_max_abs_error": 0.0
+  },
+  "runtime_seconds": 0.16951361299999235
+}
