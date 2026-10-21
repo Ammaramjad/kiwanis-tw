@@ -1,0 +1,291 @@
+{
+  "provenance": {
+    "classification": "paper-value arithmetic verification, not independent empirical reproduction",
+    "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+    "platform": "Linux-6.12.94+-x86_64-with-glibc2.39",
+    "numpy": "2.5.4"
+  },
+  "table_v_seed_statistics": {
+    "PACS": {
+      "mean": {
+        "calculated": 90.29999999999998,
+        "reported": 90.29999999999998,
+        "absolute_difference": 0.0,
+        "matches_rounding": true
+      },
+      "sample_sd": {
+        "calculated": 0.44721359549995954,
+        "reported": 0.45,
+        "absolute_difference": 0.0027864045000404736,
+        "matches_rounding": true
+      }
+    },
+    "VLCS": {
+      "mean": {
+        "calculated": 81.2,
+        "reported": 81.2,
+        "absolute_difference": 0.0,
+        "matches_rounding": true
+      },
+      "sample_sd": {
+        "calculated": 0.31622776601683794,
+        "reported": 0.32,
+        "absolute_difference": 0.0037722339831620655,
+        "matches_rounding": true
+      }
+    },
+    "Office-Home": {
+      "mean": {
+        "calculated": 75.6,
+        "reported": 75.6,
+        "absolute_difference": 0.0,
+        "matches_rounding": true
+      },
+      "sample_sd": {
+        "calculated": 0.47434164902525916,
+        "reported": 0.47,
+        "absolute_difference": 0.004341649025259187,
+        "matches_rounding": true
+      }
+    }
+  },
+  "table_vi_domain_macros": {
+    "PACS": {
+      "calculated": 90.3,
+      "reported": 90.29999999999998,
+      "absolute_difference": 1.4210854715202004e-14,
+      "matches_rounding": true
+    },
+    "VLCS": {
+      "calculated": 81.19999999999999,
+      "reported": 81.2,
+      "absolute_difference": 1.4210854715202004e-14,
+      "matches_rounding": true
+    },
+    "Office-Home": {
+      "calculated": 75.6,
+      "reported": 75.6,
+      "absolute_difference": 0.0,
+      "matches_rounding": true
+    }
+  },
+  "table_iv_macro_means": {
+    "ERM": {
+      "calculated": 78.83333333333333,
+      "reported": 78.83,
+      "absolute_difference": 0.0033333333333303017,
+      "matches_rounding": true
+    },
+    "IRM": {
+      "calculated": 78.66666666666667,
+      "reported": 78.67,
+      "absolute_difference": 0.0033333333333303017,
+      "matches_rounding": true
+    },
+    "GroupDRO": {
+      "calculated": 79.2,
+      "reported": 79.2,
+      "absolute_difference": 0.0,
+      "matches_rounding": true
+    },
+    "SWAD": {
+      "calculated": 80.5,
+      "reported": 80.5,
+      "absolute_difference": 0.0,
+      "matches_rounding": true
+    },
+    "MIRO": {
+      "calculated": 78.3,
+      "reported": 78.3,
+      "absolute_difference": 0.0,
+      "matches_rounding": true
+    },
+    "MixStyle": {
+      "calculated": 74.50000000000001,
+      "reported": 74.5,
+      "absolute_difference": 1.4210854715202004e-14,
+      "matches_rounding": true
+    },
+    "MatchDG": {
+      "calculated": 78.03666666666668,
+      "reported": 78.04,
+      "absolute_difference": 0.0033333333333303017,
+      "matches_rounding": true
+    },
+    "Balancing+ERM": {
+      "calculated": 76.43333333333332,
+      "reported": 76.43,
+      "absolute_difference": 0.003333333333316091,
+      "matches_rounding": true
+    },
+    "Mask-only": {
+      "calculated": 79.53333333333333,
+      "reported": 79.53,
+      "absolute_difference": 0.0033333333333303017,
+      "matches_rounding": true
+    },
+    "Uniform accepted donors": {
+      "calculated": 80.83333333333333,
+      "reported": 80.83,
+      "absolute_difference": 0.0033333333333303017,
+      "matches_rounding": true
+    },
+    "Filtered no diversity cap retained": {
+      "calculated": 81.2,
+      "reported": 81.2,
+      "absolute_difference": 0.0,
+      "matches_rounding": true
+    },
+    "Unfiltered diverse donors": {
+      "calculated": 80.4,
+      "reported": 80.4,
+      "absolute_difference": 0.0,
+      "matches_rounding": true
+    },
+    "CoDiRe": {
+      "calculated": 82.36666666666666,
+      "reported": 82.37,
+      "absolute_difference": 0.0033333333333445125,
+      "matches_rounding": true
+    }
+  },
+  "table_ix_frozen_audit": {
+    "acceptance": {
+      "calculated": 74.6,
+      "reported": 74.6,
+      "absolute_difference": 0.0,
+      "matches_rounding": true
+    },
+    "disagreement": {
+      "calculated": 3.4048257372654156,
+      "reported": 3.4,
+      "absolute_difference": 0.004825737265415686,
+      "matches_rounding": true
+    },
+    "feasible": {
+      "calculated": 91.3,
+      "reported": 91.3,
+      "absolute_difference": 0.0,
+      "matches_rounding": true
+    },
+    "fallback": {
+      "calculated": 8.7,
+      "reported": 8.7,
+      "absolute_difference": 0.0,
+      "matches_rounding": true
+    }
+  },
+  "table_xiii_paired_intervals": {
+    "SWAD": {
+      "PACS": {
+        "calculated": [
+          1.5171942823906646,
+          2.882805717609336
+        ],
+        "rounded_2dp": [
+          1.52,
+          2.88
+        ]
+      },
+      "VLCS": {
+        "calculated": [
+          1.1034140235568468,
+          2.096585976443153
+        ],
+        "rounded_2dp": [
+          1.1,
+          2.1
+        ]
+      },
+      "Office-Home": {
+        "calculated": [
+          1.0551210353352702,
+          2.54487896466473
+        ],
+        "rounded_2dp": [
+          1.06,
+          2.54
+        ]
+      }
+    },
+    "No diversity cap retained": {
+      "PACS": {
+        "calculated": [
+          1.0034140235568467,
+          1.9965859764431533
+        ],
+        "rounded_2dp": [
+          1.0,
+          2.0
+        ]
+      },
+      "VLCS": {
+        "calculated": [
+          0.46548727061224093,
+          1.3345127293877592
+        ],
+        "rounded_2dp": [
+          0.47,
+          1.33
+        ]
+      },
+      "Office-Home": {
+        "calculated": [
+          0.5413407765014527,
+          1.6586592234985473
+        ],
+        "rounded_2dp": [
+          0.54,
+          1.66
+        ]
+      }
+    },
+    "Uniform accepted donors": {
+      "PACS": {
+        "calculated": [
+          1.2792675294460585,
+          2.5207324705539413
+        ],
+        "rounded_2dp": [
+          1.28,
+          2.52
+        ]
+      },
+      "VLCS": {
+        "calculated": [
+          0.7034140235568467,
+          1.6965859764431532
+        ],
+        "rounded_2dp": [
+          0.7,
+          1.7
+        ]
+      },
+      "Office-Home": {
+        "calculated": [
+          0.8792675294460585,
+          2.1207324705539414
+        ],
+        "rounded_2dp": [
+          0.88,
+          2.12
+        ]
+      }
+    }
+  },
+  "section_o_mask_parameters": {
+    "calculated": 1050880,
+    "reported": 1050880,
+    "absolute_difference": 0,
+    "matches_rounding": true
+  },
+  "table_vii_derived_contrasts": {
+    "no_cf_minus_full_disagreement_points": 7.199999999999999,
+    "full_minus_uncapped_no_diversity_effective_donors": 3.1999999999999997
+  },
+  "figure2_effective_ranks": {
+    "rank_one": 1.0,
+    "anisotropic": 1.7547653506033232,
+    "isotropic": 2.0
+  }
+}
