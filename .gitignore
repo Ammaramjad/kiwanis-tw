@@ -28,3 +28,10 @@ Homestead.json
 .env.production
 .phpactor.json
 auth.json
+
+# Python reproduction harness
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.venv/
